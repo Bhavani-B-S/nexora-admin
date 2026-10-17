@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXORA Admin Dashboard</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: #f1f5f9; color: #172033;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      background: #111827; color: white; padding: 20px;
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    main { max-width: 950px; margin: 30px auto; padding: 0 18px; }
+    .card {
+      background: white; padding: 24px; margin-bottom: 18px;
+      border-radius: 12px; border: 1px solid #e2e8f0;
+    }
+    button {
+      padding: 11px 16px; border: 0; border-radius: 8px;
+      background: #0284c7; color: white; cursor: pointer;
+    }
+    a { color: #0369a1; }
+    .muted { color: #64748b; line-height: 1.6; }
+    #dashboard { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <strong>NEXORA DIGI SOLUTIONS — ADMIN</strong>
+      <p id="status">Checking authentication...</p>
+    </div>
+    <button id="logoutBtn" hidden>Sign Out</button>
+  </header>
+
+  <main id="dashboard">
+    <section class="card">
+      <h1>Admin Dashboard</h1>
+      <p>Welcome to your Nexora admin panel.</p>
+      <p class="muted">
+        This is a starter dashboard. Your existing content-management
+        interface must be connected separately if you want to manage
+        services, projects, enquiries and media.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Customer Website</h2>
+      <a href="https://bhavani-b-s.github.io/Nexora-Digi-Solutionss/"
+         target="_blank" rel="noopener">Open Customer Website</a>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from
+      "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from
+      "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "PASTE_API_KEY_HERE",
+      authDomain: "PASTE_AUTH_DOMAIN_HERE",
+      projectId: "nexora-digi-solutions",
+      storageBucket: "PASTE_STORAGE_BUCKET_HERE",
+      messagingSenderId: "PASTE_MESSAGING_SENDER_ID_HERE",
+      appId: "PASTE_APP_ID_HERE"
+    };
+
+    // Enter the exact admin email registered in Firebase Authentication.
+    const ADMIN_EMAIL = "REPLACE_WITH_YOUR_ADMIN_EMAIL";
+
+    const status = document.getElementById("status");
+    const dashboard = document.getElementById("dashboard");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const configured = Object.values(firebaseConfig).every(
+      value => value && !value.startsWith("PASTE_")
+    );
+
+    if (!configured ||
+        ADMIN_EMAIL === "REPLACE_WITH_YOUR_ADMIN_EMAIL") {
+      status.textContent =
+        "Setup required: configure Firebase and the admin email.";
+    } else {
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      onAuthStateChanged(auth, async user => {
+        if (!user) {
+          window.location.replace("login.html");
+          return;
+        }
+
+        if ((user.email || "").toLowerCase() !==
+            ADMIN_EMAIL.toLowerCase()) {
+          await signOut(auth);
+          window.location.replace("login.html");
+          return;
+        }
+
+        status.textContent = "Signed in as " + user.email;
+        dashboard.style.display = "block";
+        logoutBtn.hidden = false;
+      });
+
+      logoutBtn.addEventListener("click", async () => {
+        await signOut(auth);
+        window.location.replace("login.html");
+      });
+    }
+  </script>
+</body>
+</html>
