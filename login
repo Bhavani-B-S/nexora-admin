@@ -7,66 +7,34 @@
   <title>NEXORA Admin Login</title>
   <style>
     * { box-sizing: border-box; }
-
     body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #080e1c;
-      font-family: Arial, sans-serif;
-      color: white;
-      padding: 20px;
+      margin: 0; min-height: 100vh; display: grid;
+      place-items: center; background: #080e1c;
+      color: white; font-family: Arial, sans-serif; padding: 20px;
     }
-
     .card {
-      width: 100%;
-      max-width: 400px;
-      padding: 30px;
-      background: #151f35;
-      border: 1px solid #293754;
-      border-radius: 16px;
+      width: 100%; max-width: 400px; padding: 30px;
+      background: #151f35; border-radius: 16px;
     }
-
-    h1 { color: #38bdf8; margin-bottom: 8px; }
-
-    label {
-      display: block;
-      margin-top: 18px;
-      margin-bottom: 6px;
-    }
-
+    h1 { color: #38bdf8; }
+    label { display: block; margin: 18px 0 7px; }
     input {
-      width: 100%;
-      padding: 12px;
-      background: #080e1c;
-      color: white;
-      border: 1px solid #40506e;
-      border-radius: 8px;
-      font-size: 15px;
+      width: 100%; padding: 12px; border-radius: 8px;
+      border: 1px solid #40506e; background: #080e1c;
+      color: white; font-size: 15px;
     }
-
     button {
-      width: 100%;
-      padding: 13px;
-      margin-top: 22px;
-      border: 0;
-      border-radius: 8px;
-      background: #38bdf8;
-      color: #08111f;
-      font-weight: bold;
-      cursor: pointer;
+      width: 100%; padding: 13px; margin-top: 22px;
+      border: 0; border-radius: 8px; background: #38bdf8;
+      font-weight: bold; cursor: pointer;
     }
-
-    button:disabled { opacity: 0.5; }
     #message { line-height: 1.5; overflow-wrap: anywhere; }
   </style>
 </head>
 <body>
   <div class="card">
     <h1>NEXORA</h1>
-    <p>Admin Login</p>
+    <p>Administrator Login</p>
 
     <form id="loginForm">
       <label for="email">Email Address</label>
@@ -84,14 +52,9 @@
   <script type="module">
     import { initializeApp } from
       "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-    import {
-      getAuth,
-      signInWithEmailAndPassword
-    } from
+    import { getAuth, signInWithEmailAndPassword } from
       "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    // Replace with your Firebase web app configuration.
     const firebaseConfig = {
       apiKey: "PASTE_API_KEY_HERE",
       authDomain: "PASTE_AUTH_DOMAIN_HERE",
@@ -111,7 +74,7 @@
 
     if (!configured) {
       message.textContent =
-        "Firebase setup required. Add your Firebase configuration.";
+        "Setup required: add your Firebase web app configuration.";
       message.style.color = "#fbbf24";
       button.disabled = true;
     } else {
@@ -129,7 +92,6 @@
             document.getElementById("email").value.trim(),
             document.getElementById("password").value
           );
-
           window.location.href = "admin.html";
         } catch (error) {
           message.textContent =
